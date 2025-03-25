@@ -9,6 +9,7 @@ from torch.utils.tensorboard import SummaryWriter
 import argparse
 import datetime
 
+# Set up parser
 parser = argparse.ArgumentParser(description="Train model")
 parser.add_argument('--base_folder', type=str, required=True, help='Path to the base folder of the dataset')
 parser.add_argument('--normalize', type=bool, default=True, help='Whether to normalize the data')
@@ -23,9 +24,7 @@ args = parser.parse_args()
 run_name = f"lr_{args.learning_rate}_batch_{args.batch_size}_opt_{args.weight_init}_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}"
 model_dir = os.path.join("models", run_name)
 log_dir = os.path.join("runs", run_name)
-
 os.makedirs(model_dir, exist_ok=True)
-
 writer = SummaryWriter(log_dir)
 
 # Load dataset
@@ -47,7 +46,6 @@ elif args.optimizer == 'rmsprop':
     optimizer = optim.RMSprop(model.parameters(), lr=args.learning_rate, weight_decay=args.l2_reg)
 elif args.optimizer == 'momentum':
     optimizer = optim.SGD(model.parameters(), lr=args.learning_rate, momentum=0.9, weight_decay=args.l2_reg)
-
 
 criterion = nn.CrossEntropyLoss()
 

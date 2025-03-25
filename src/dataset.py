@@ -1,55 +1,81 @@
+import os
 import pandas as pd
-import numpy as np
 import torch
+from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 import os
+import numpy as np
+
+pd.set_option('future.no_silent_downcasting', True)
+
 
 def load_all_csvs(base_folder, apply_pca=False, n_components=3, normalize=True):
-    # Assuming files are in subfolders like sub01, sub02, etc.
+    """
+    Loads all csv files from subfolders (sub01, sub02, sub03, sub05), 
+    combines them into a single document, and preprocesses them.
+    """
+    if not os.path.exists(base_folder):
+        raise FileNotFoundError(f"the base folder was not found: {base_folder}")
+
     all_files = []
-    all_labels = []
+    subfolders = ["sub01", "sub02", "sub03", "sub05"]
 
-    for subfolder in ['sub01', 'sub02', 'sub03', 'sub05']:  # Adjust according to your folders
-        folder_path = os.path.join(base_folder, subfolder)
-        for file in os.listdir(folder_path):
-            if file.endswith('.csv'):
-                file_path = os.path.join(folder_path, file)
-                data = pd.read_csv(file_path)
-                X = data.iloc[:, 1:4].values  # Assuming the first column is some identifier and we want columns 1, 2, 3
-                y = data.iloc[:, 4].values    # Target labels in the 5th column
+    # Collect all CSV file paths
+    for subfolder in subfolders:
+        subfolder_path = os.path.join(base_folder, subfolder)
+        for file in os.listdir(subfolder_path):
+            if file.endswith(".csv"):
+                all_files.append(os.path.join(subfolder_path, file))
 
-                # Convert # to -1
-                y = np.where(y == '#', -1, y)
-                y = y.astype(int)
+    # Read and combine all .csv files
+    dataframes = []
+    for f in all_files:
+        df = pd.read_csv(f, header=None, names=['Index', 'A', 'B', 'C', 'Target'], index_col=0, delimiter=',')
+        # Handle missing values and ensure 'Target' is numeric
+        df['Target'] = pd.to_numeric(df['Target'], errors='coerce')
+        df['Target'] = df['Target'].fillna(-1)  # Handle any NaN values created during conversion
+        df['C'] = pd.to_numeric(df['C'], errors='coerce')
+        df['C'] = df['C'].fillna(-1)  # Handle NaN in 'C' column as well
+        dataframes.append(df)
 
-                all_files.append(X)
-                all_labels.append(y)
+    full_data = pd.concat(dataframes, ignore_index=True)
 
-    X_all = np.vstack(all_files)
-    y_all = np.concatenate(all_labels)
+    # Extract features and target
+    X = full_data[['A', 'B', 'C']]
+    y = full_data['Target']
 
-    # Normalize features
-    if normalize:
-        scaler = StandardScaler()
-        X_all = scaler.fit_transform(X_all)
+    # Convert to numpy arrays
+    X = X.apply(pd.to_numeric, errors='coerce')
+    y = pd.to_numeric(y, errors='coerce')
 
-    # Apply PCA if requested
+    # Drop NaN values
+    X = X.dropna()
+    y = y.dropna()
+
+    # Convert to numpy arrays for further processing
+    X = X.to_numpy().astype(float)
+    y = y.to_numpy().astype(float)
+
+    # Apply PCA if enabled
     if apply_pca:
         pca = PCA(n_components=n_components)
-        X_all = pca.fit_transform(X_all)
+        X = pca.fit_transform(X)
 
-    # Split the data into train, validation, and test sets (80%, 10%, 10% split)
-    train_size = int(0.8 * len(X_all))
-    val_size = int(0.1 * len(X_all))
+    # Normalize if enabled
+    if normalize:
+        scaler = StandardScaler()
+        X = scaler.fit_transform(X)
 
-    X_train = torch.tensor(X_all[:train_size], dtype=torch.float32)
-    y_train = torch.tensor(y_all[:train_size], dtype=torch.long)
+    # Train/Test split (90% train, 10% test)
+    from sklearn.model_selection import train_test_split
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
 
-    X_val = torch.tensor(X_all[train_size:train_size + val_size], dtype=torch.float32)
-    y_val = torch.tensor(y_all[train_size:train_size + val_size], dtype=torch.long)
+    # Further split training set (20% validation)
+    X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.2, random_state=42)
 
-    X_test = torch.tensor(X_all[train_size + val_size:], dtype=torch.float32)
-    y_test = torch.tensor(y_all[train_size + val_size:], dtype=torch.long)
+    # Convert to torch tensors and ensure target is 1D
+    X_train, X_val, X_test = map(lambda x: torch.tensor(x, dtype=torch.float32), [X_train, X_val, X_test])
+    y_train, y_val, y_test = map(lambda y: torch.tensor(y, dtype=torch.long).view(-1), [y_train, y_val, y_test])
 
     return X_train, X_val, X_test, y_train, y_val, y_test

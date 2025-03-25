@@ -10,8 +10,6 @@ parser.add_argument("--base_folder", type=str, required=True, help="Path to data
 parser.add_argument("--model_path", type=str, default="../models/model.pth", help="Path to trained model")
 args = parser.parse_args()
 
-
-
 # Load test data
 X_train, X_val, X_test, y_train, y_val, y_test = load_all_csvs(args.base_folder, apply_pca=True)
 
