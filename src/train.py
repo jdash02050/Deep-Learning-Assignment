@@ -53,7 +53,7 @@ train_losses = []
 val_losses = []
 
 # Training loop
-num_epochs = 10000
+num_epochs = 101
 for epoch in range(num_epochs):
     
     train_data = torch.utils.data.TensorDataset(X_train, y_train)
@@ -75,18 +75,25 @@ for epoch in range(num_epochs):
     writer.add_scalar("Loss/Train", train_loss, epoch)
     writer.add_scalar("Loss/Validation", val_loss, epoch)
 
-    if epoch % 1000 == 0:
+    if epoch % 10 == 0:
         print(f"Epoch [{epoch}/{num_epochs}], Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}")
 
 # Close Tensorboard writer
 writer.close()
 
+
+
 # Ensure models directory exists
-os.makedirs("../models", exist_ok=True)
-torch.save(model.state_dict(), "../models/model.pth")
+#os.makedirs("../models", exist_ok=True)
+#torch.save(model.state_dict(), "../models/model.pth")
 
 loss_plot_filename = f"loss_plot_lr_{args.learning_rate}_batch_{args.batch_size}_opt_{args.optimizer}_init_{args.weight_init}_l2_{args.l2_reg}.png"
+model_filename = f"model_{args.learning_rate}_batch_{args.batch_size}_opt_{args.optimizer}_init_{args.weight_init}_l2_{args.l2_reg}.pth"
 loss_plot_path = os.path.join(model_dir, loss_plot_filename)
+model_path = os.path.join(model_dir, model_filename)
+
+torch.save(model.state_dict(), model_path)
+
 
 # Plot Training & Validation Loss
 plt.figure(figsize=(10, 5))
