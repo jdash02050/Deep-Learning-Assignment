@@ -1,35 +1,39 @@
 Ensure Python is up to date:
-python --version
+
+    python --version
 
 Create a virtual environment:
+  
   Windows:
-  python -m venv venv
-  .\venv\Scripts\activate
+  
+    python -m venv venv
+    .\venv\Scripts\activate
 
   Linux/macOS:
-  python3 -m venv venv
-  source venv/bin/activate
+  
+    python3 -m venv venv
+    source venv/bin/activate
 
 Install Dependencies:
-pip install -r requirements.txt
+
+    pip install -r requirements.txt
 
 Prepare the Dataset:
 Download the dataset; The structure should look like this:
 
-eel4810-dataset/eel4810-dataset/
-
-    sub01/
+    eel4810-dataset/eel4810-dataset/
+      sub01/
         [CSV files here]
-    sub02/
+      sub02/
         [CSV files here]
-    sub03/
+      sub03/
         [CSV files here]
-    sub05/
+      sub05/
         [CSV files here]
 
 Run the training script:
 
-python src/train.py --base_folder "path/to/eel4810-dataset/eel4810-dataset" --normalize True --batch_size 32 --learning_rate 0.01 --optimizer adam --weight_init random --l2_reg 0.0
+    python src/train.py --base_folder "path/to/eel4810-dataset/eel4810-dataset" --normalize True --batch_size 32 --learning_rate 0.01 --optimizer adam --weight_init random --l2_reg 0.0
 
 Pass these arguments with the function to change various aspects about the model's setup\
 
@@ -42,14 +46,16 @@ Pass these arguments with the function to change various aspects about the model
     --l2_reg: The L2 regularization coefficient (default is 0.0).
 
 For example, to train with the Adam optimizer, Xavier weight initialization, and L2 regularization:
-python src/train.py --base_folder "path/to/eel4810-dataset/eel4810-dataset" --normalize True --batch_size 32 --learning_rate 0.01 --optimizer adam --weight_init xavier --l2_reg 0.01
+    
+    python src/train.py --base_folder "path/to/eel4810-dataset/eel4810-dataset" --normalize True --batch_size 32 --learning_rate 0.01 --optimizer adam --weight_init xavier --l2_reg 0.01
 
 
 
 Testing the Model:
 After the model finishes training, it will be saved as a .pth file
 Test the model using the following:
-python src/test.py --model_path "path/to/saved_model.pth" --test_data "path/to/test_data.csv"
+
+    python src/test.py --model_path "path/to/saved_model.pth" --test_data "path/to/test_data.csv"
 
 where
 
