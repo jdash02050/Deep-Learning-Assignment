@@ -63,3 +63,10 @@ where
       --test_data: Path to the test data (e.g., a CSV file).
 
 This takes a VERY long time running on a CPU (which is all that I had available)
+
+NOTE:
+.pth and .png (graph) files are saved within the models folder 
+
+I ended up running the code for only 100 epochs in the interest of saving time; the output graphs may not look as clean as a result
+
+Feel free to adjust the total number of epochs and the rate at which the values are printed to the terminal within the src/train.py file. These values are hardcoded and can easily be changed later.
