@@ -33,7 +33,7 @@ Download the dataset into the project folder; The structure should look like thi
     src
       [src contents]
     requirements.txt
-    README.txt
+    README.md
     
 
 Run the training script:
