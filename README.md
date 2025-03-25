@@ -52,6 +52,7 @@ Test the model using the following:
 python src/test.py --model_path "path/to/saved_model.pth" --test_data "path/to/test_data.csv"
 
 where
+
       --model_path: Path to the trained model file.
       --test_data: Path to the test data (e.g., a CSV file).
 
