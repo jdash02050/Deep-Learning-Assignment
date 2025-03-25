@@ -28,9 +28,11 @@ eel4810-dataset/eel4810-dataset/
         [CSV files here]
 
 Run the training script:
+
 python src/train.py --base_folder "path/to/eel4810-dataset/eel4810-dataset" --normalize True --batch_size 32 --learning_rate 0.01 --optimizer adam --weight_init random --l2_reg 0.0
 
-Pass these arguments with the function to change various aspects about the model's setup
+Pass these arguments with the function to change various aspects about the model's setup\
+
 --base_folder: The path to the folder containing the dataset (eel4810-dataset).
 --normalize: Set this to True to normalize the features.
 --batch_size: The batch size for training (default is 32).
