@@ -19,7 +19,7 @@ Install Dependencies:
     pip install -r requirements.txt
 
 Prepare the Dataset:
-Download the dataset; The structure should look like this:
+Download the dataset into the project folder; The structure should look like this:
 
     eel4810-dataset/eel4810-dataset/
       sub01/
@@ -30,6 +30,11 @@ Download the dataset; The structure should look like this:
         [CSV files here]
       sub05/
         [CSV files here]
+    src
+      [src contents]
+    requirements.txt
+    README.txt
+    
 
 Run the training script:
 
