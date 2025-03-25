@@ -17,6 +17,7 @@ Prepare the Dataset:
 Download the dataset; The structure should look like this:
 
 eel4810-dataset/eel4810-dataset/
+
     sub01/
         [CSV files here]
     sub02/
