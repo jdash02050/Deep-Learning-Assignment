@@ -85,6 +85,9 @@ writer.close()
 os.makedirs("../models", exist_ok=True)
 torch.save(model.state_dict(), "../models/model.pth")
 
+loss_plot_filename = f"loss_plot_lr_{args.learning_rate}_batch_{args.batch_size}_opt_{args.optimizer}_init_{args.weight_init}_l2_{args.l2_reg}.png"
+loss_plot_path = os.path.join(model_dir, loss_plot_filename)
+
 # Plot Training & Validation Loss
 plt.figure(figsize=(10, 5))
 plt.plot(train_losses, label="Training Loss", color="blue")
@@ -94,5 +97,5 @@ plt.ylabel("Loss")
 plt.title("Training vs. Validation Loss")
 plt.legend()
 plt.grid()
-plt.savefig("../models/loss_plot.png")  # Save the figure
+plt.savefig(loss_plot_path)  # Save the figure
 plt.show()
