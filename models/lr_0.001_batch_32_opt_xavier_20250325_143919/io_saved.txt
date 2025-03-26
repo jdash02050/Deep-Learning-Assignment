@@ -1,0 +1,15 @@
+# 9. Normalization, Batch 32, LR 0.001, SGD, Xavier Init, No L2
+
+python src/train.py --base_folder "C:/Users/jljme/OneDrive/Desktop/UCF 2025/Introduction to Deep Learning/Assignment_2/Deep-Learning-Assignment/eel4810-dataset/eel4810-dataset" --normalize True --batch_size 32 --learning_rate 0.001 --optimizer sgd --weight_init xavier --l2_reg 0.0
+
+Epoch [0/101], Loss: 1.0114, Val Loss: 0.9744
+Epoch [10/101], Loss: 0.6133, Val Loss: 0.7550
+Epoch [20/101], Loss: 0.8695, Val Loss: 0.7277
+Epoch [30/101], Loss: 0.6633, Val Loss: 0.7192
+Epoch [40/101], Loss: 0.8569, Val Loss: 0.7077
+Epoch [50/101], Loss: 0.7243, Val Loss: 0.7003
+Epoch [60/101], Loss: 0.7425, Val Loss: 0.6999
+Epoch [70/101], Loss: 0.7624, Val Loss: 0.6900
+Epoch [80/101], Loss: 1.0650, Val Loss: 0.6849
+Epoch [90/101], Loss: 0.6712, Val Loss: 0.6842
+Epoch [100/101], Loss: 0.8847, Val Loss: 0.6703
